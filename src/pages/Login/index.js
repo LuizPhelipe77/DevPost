@@ -1,13 +1,17 @@
-import React, { useState} from 'react';
+import React, { useState, useContext} from 'react';
 import { View, Text } from 'react-native';
 
 import { Container, Title, Input, Button, ButtonText, SignUpButton, SignUpText } from './styles';
+
+import { AuthContext } from '../../contexts/auth';
 
 function Login(){
     const [login, setLogin] = useState(true);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const { signUp } = useContext(AuthContext);
 
     function toggleLogin(){
         setLogin(!login)  //inverte de true para falso e o contrario
@@ -25,11 +29,12 @@ function Login(){
     }
 
     //cadastrar usuario
-    function handleSignUp(){
+    async function handleSignUp(){
         if(name === '' || email === '' || password === ''){
             console.log('preecha todos os campos para cadastrar')
             return;
         }
+        await signUp(email, password, name);
     }
 
     if(login){
@@ -40,7 +45,7 @@ function Login(){
                </Title>
     
                <Input
-                placeholder='seuEmail@teste.com'
+                placeholder='seuemail@teste.com'
                 value={email}
                 onChangeText={ (text) =>setEmail(text) } //pega o valor e coloca dentro da useState
                />
@@ -77,7 +82,7 @@ function Login(){
            />
 
            <Input
-            placeholder='seuEmail@teste.com'
+            placeholder='seuemail@teste.com'
             value={email}
             onChangeText={ (text) =>setEmail(text) }
            />
