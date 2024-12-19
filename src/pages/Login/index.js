@@ -1,5 +1,5 @@
 import React, { useState, useContext} from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 
 import { Container, Title, Input, Button, ButtonText, SignUpButton, SignUpText } from './styles';
 
@@ -11,7 +11,7 @@ function Login(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const { signUp } = useContext(AuthContext);
+    const { signUp, signIn, loading } = useContext(AuthContext);
 
     function toggleLogin(){
         setLogin(!login)  //inverte de true para falso e o contrario
@@ -21,11 +21,12 @@ function Login(){
     }
 
     //fazer o login do usuario
-    function handleSignIn(){
+    async function handleSignIn(){
         if(email==='' || password === ''){
             console.log('preecha todos os campos')
             return;
         }
+        await signIn(email, password)
     }
 
     //cadastrar usuario
@@ -58,7 +59,12 @@ function Login(){
                />
     
                <Button onPress={handleSignIn}>
+                {loading ? (
+                    <ActivityIndicator size={20} color='#fff' />
+                ) : (
                     <ButtonText>Acessar</ButtonText>
+                )}
+                    
                </Button>
     
                <SignUpButton onPress={toggleLogin}>
@@ -94,7 +100,11 @@ function Login(){
            />
 
            <Button onPress={handleSignUp}>
-                <ButtonText>Cadastrar</ButtonText>
+            {loading ? (
+                    <ActivityIndicator size={20} color='#fff' />
+                ) : (
+                    <ButtonText>Cadastrar</ButtonText>
+                )}
            </Button>
 
            <SignUpButton onPress={toggleLogin}>
